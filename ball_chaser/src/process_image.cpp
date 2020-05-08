@@ -45,25 +45,29 @@ void stop()
     drive_robot(0.0f, 0.0f);
 }
 
+bool is_white_pixel(int r, int g, int b) {
+    return r == 255 && g == 255 && b == 255;
+}
+
 // Find the middle white pixel in an image, done by calculate the rolling average
 // of white pixels inside the image. If there is no such white pixels, return
 // a pair of [-1, -1]
 std::pair<int, int> find_middle_white_pixel(const sensor_msgs::Image &img)
 {
-    int white_pixel = 255;
     bool contain_white_pixel = false;
     int width_sum = 0;
     int height_sum = 0;
     int count = 0;
     for (int i = 0; i < img.height; i++) {
-	for (int j = 0; j < img.width; j++) {
-	    if (img.data[i * img.width + j] == white_pixel) {
-		contain_white_pixel = true;
-		width_sum += j;
-		height_sum += i;
-		count++;
-	    }	    
-	}
+	    for (int j = 0; j < img.width; j++) {
+            int r_i = (i * img.width + j) * 3;  // index of red channel, r_i+1 is green, and r_i+2 is blue
+            if (is_white_pixel(img.data[r_i], img.data[r_i + 1], img.data[r_i + 2])) {
+	            contain_white_pixel = true;
+	            width_sum += j;
+	            height_sum += i;
+	            count++;
+            }	    
+	    }
     }
 
     if (!contain_white_pixel) return std::make_pair(-1, -1);
