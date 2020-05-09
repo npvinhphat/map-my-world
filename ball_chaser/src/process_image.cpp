@@ -24,19 +24,19 @@ void drive_robot(float lin_x, float ang_z)
 void move_left()
 {
     ROS_INFO("Moving left");
-    drive_robot(0.0f, 0.1f);
+    drive_robot(0.0f, 0.5f);
 }
 
 void move_right()
 {
     ROS_INFO("Moving right");
-    drive_robot(0.0f, -0.1f);
+    drive_robot(0.0f, -0.5f);
 }
 
 void move_forward()
 {
     ROS_INFO("Moving forward");
-    drive_robot(0.1f, 0.0f);
+    drive_robot(0.5f, 0.0f);
 }
 
 void stop()
