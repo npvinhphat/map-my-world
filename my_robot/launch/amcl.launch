@@ -13,10 +13,16 @@
     <!-- AMCL Parameter tuning -->
     <param name="min_particles" value="20" />
     <param name="max_particles" value="100" />
+
     <param name="odom_model_type" value="diff-corrected" />
+    <param name="odom_alpha1" value="0.05" />
+	  <param name="odom_alpha2" value="0.05" />
+	  <param name="odom_alpha3" value="0.05" />
+	  <param name="odom_alpha4" value="0.05" />
 
     <param name="initial_pose_x" value="0" />
     <param name="initial_pose_y" value="0" />
+    <param name="initial_pose_a" value="-1.5708" />
   </node>
 
   <!-- Move Base -->
