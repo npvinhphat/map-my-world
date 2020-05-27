@@ -20,6 +20,9 @@
 	  <param name="odom_alpha3" value="0.05" />
 	  <param name="odom_alpha4" value="0.05" />
 
+    <param name="laser_z_hit" value="0.975" />
+    <param name="laser_z_rand" value="0.025" />
+
     <param name="initial_pose_x" value="0" />
     <param name="initial_pose_y" value="0" />
     <param name="initial_pose_a" value="-1.5708" />
