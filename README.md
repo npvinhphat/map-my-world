@@ -1,22 +1,16 @@
-# Go Chase It
+# Where Am I
 
-This is the second project for Udacity's [Robotics Software Engineer Nanodegree Program](https://www.udacity.com/course/robotics-software-engineer--nd209), namely *Go Chase It!*.
+This is the third project for Udacity's [Robotics Software Engineer Nanodegree Program](https://www.udacity.com/course/robotics-software-engineer--nd209), namely *Where Am I*.
 
 ## How it works
 
-The project is split into two packages: **my_robot** and **ball_chaser**.
+The main package for this project is **my_robot**, which houses the robot, including the camera module and the lidar module associated, as well as the world which the robot will be instantitated in.
 
-**my_robot** houses the robot, including the camera module and the lidar module associated, as well as the world which the robot will be instantitated in. There are two topics to take note here:
-* `/cmd/vel`: control the movement of the robot
-* `/camera/rgb/image_raw`: the raw image from robot's camera
+This robot uses [AMCL](http://wiki.ros.org/amcl) package to perform localization. Most parameters can be configured in `amcl.launch` file, under `/my_robot/launch/` folder.
 
-**ball_chaser** houses the logic the chasing the white ball, including two nodes:
-* **drive_bot**: houses a service `/ball_chaser/command_robot` with `ball_chaser/DriveToTarget` input/output to publish the *linear_x* ang *angular_z* drive command to `/cmd/vel`
-* **process_image**: subsribe to `/camera/rgb/image_raw`, do some simple logic to determine the white ball position, and calls `/ball_chaser/command_robot` to drive the robot
+To visualize on Rviz, there is also a generated map (under `/my_robot/maps/` folder) using Udacity's provided package [pgm_map_creator](https://github.com/udacity/pgm_map_creator).
 
-Simple illustration below:
-
-![go-chase-it-architecture](https://user-images.githubusercontent.com/10416670/81492756-6e091600-92d5-11ea-94b6-cbe4c25ecd4b.png)
+This repos also includes a package named **teleop_twist_keyboard** as a simple mean to control the robot. The documentation can be seen [here](http://wiki.ros.org/teleop_twist_keyboard).
 
 ## Installation
 
@@ -26,14 +20,14 @@ Use the following commands to build the modules:
 
 ```
 cd ~/catkin_ws/src
-git pull git@github.com:npvinhphat/go-chase-it.git .
+git pull git@github.com:npvinhphat/where-am-i.git .
 cd ..
 catkin_make
 ```
 
 ## Usage
 
-Run the following commands to open Gazebo and Rviz:
+Run the following commands to open Gazebo and Rviz, and launch the world:
 
 ```
 cd ~/catkin_ws
@@ -42,17 +36,28 @@ source devel/setup.bash
 roslaunch my_robot world.launch
 ```
 
-Then your world should look the same as below, with a white ball and a robot:
-
-![go-chase-it-gazebo](https://user-images.githubusercontent.com/10416670/81492119-58ddb880-92d0-11ea-94be-1991c388adad.png)
-
-In order to run the node for the robot to chase the white ball, **open a new terminal** and do the following:
+In order to run the amcl node for the robot to perform localization, **open a new terminal** and do the following:
 
 ```
 cd ~/catkin_ws
 catkin_make
 source devel/setup.bash
-roslaunch ball_chaser ball_chaser.launch
+roslaunch my_robot amcl.launch
 ```
 
-Then in Gazebo, drag the white ball in front of the robot and see the result.
+Then in Rviz, load the config `config.rviz` to show the localization. The red arrow is the particles in AMCL algorithm. Your Rviz should looks like below:
+
+![](https://user-images.githubusercontent.com/10416670/83043624-0cd79580-a07e-11ea-943d-89cd28bd84bb.png)
+
+Finally, use the teleop to move the robot around and test your localization performance, by **open a new terminal** and do the below, followed by the instruction from the terminal:
+
+```
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash
+rosrun teleop_twist_keyboard teleop_twist_keyboard.py
+```
+
+By moving around, the particles should converges, showing that the robot is being localized:
+
+![](https://user-images.githubusercontent.com/10416670/83043607-09440e80-a07e-11ea-8edb-fa8a6bd410ae.png)
