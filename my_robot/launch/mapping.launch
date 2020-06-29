@@ -53,6 +53,9 @@
 
       <!-- Set to false to avoid saving data when robot is not moving -->
       <param name="Mem/NotLinkedNodesKept" type="string" value="false"/>
+
+      <!-- Set the value to change the rate of loop closure acceptance -->
+      <param name="RGBD/OptimizeMaxError" type="string" value="4"/>
     </node>
 
   </group>
